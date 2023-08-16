@@ -1,0 +1,31 @@
+.todo-list {
+  list-style-type: none;
+  width: 600px;
+}
+.list-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.table-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  border-bottom: 1px solid black;
+  width: 600px;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.enter-value{
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.edit-value{
+  display: inline-block;
+  margin-bottom: 20px;
+}
