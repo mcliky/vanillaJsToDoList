@@ -5,51 +5,69 @@ let number = 1;
 let itemName = "Item 2";
 let status = "Todo";
 let todoList = document.querySelector(".todo-list");
-let parent;
-let prevParent;
 
-addBtn.addEventListener("click", () => {
-  let todoItem = `<li class="todo-item">
+addBtn.addEventListener("click", (event) => {
+  if (todoInput.value === "") {
+    event.target.parentElement.querySelector(".warning").style.display =
+      "inline-block";
+  } else {
+    event.target.parentElement.querySelector(".warning").style.display = "none";
+    let todoItem = `<li class="todo-item">
 <span>${number}</span> <span>${todoInput.value} </span><span>${status}</span>
 <button data-action="edit">Edit</button>
 <button data-action="remove">Remove</button>
 </li> `;
-  number += 1;
-  todoList.innerHTML += todoItem;
-  todoInput.value = "";
+    number += 1;
+    todoList.innerHTML += todoItem;
+    todoInput.value = "";
+  }
 });
 
 class Element {
   constructor(elem) {
-    elem.onclick = this.onClick.bind(this);
+    this.elem = elem; // Store the element
+
+    elem.addEventListener("click", this.onClick.bind(this));
   }
 
   edit(event) {
-    parent = event.target.parentElement;
-    prevParent = parent.innerHTML;
+    let parent = event.target.parentElement;
+    this.prevParent = parent.innerHTML; // Store the previous content
     parent.innerHTML = `<div class="edit-value">
  <input class="edit-text" type="text" placeholder="new name" />
  <button data-action="editTodo" type="button">Edit name</button>
  <button data-action="cancelEdit" type="button">Cancel</button>
-</div>`;
+</div>
+<p class='warning'>No input</p>`;
   }
 
   editTodo(event) {
-    number -= 1;
-    parent.innerHTML = `<span>${number}</span> <span>${
-      parent.querySelector(".edit-text").value
-    } </span><span>${status}</span>
-   <button class="edit-button">Edit</button>
-   <button class="remove-button">Remove</button>
+    let parent = event.target.parentElement;
+    if (parent.querySelector(".edit-text").value === "") {
+      parent.querySelector(".warning").style.display = "block";
+    } else {
+      number -= 1;
+      parent.innerHTML = `<span>${number}</span> <span>${
+        parent.querySelector(".edit-text").value
+      } </span><span>${status}</span>
+   <button data-action="edit">Edit</button>
+   <button data-action="remove">Remove</button>
   `;
+    }
   }
 
   cancelEdit(event) {
-    parent.innerHTML = prevParent;
+    let parent = event.target.parentElement;
+    let editValueDiv = parent.querySelector(".edit-value");
+    if (editValueDiv) {
+      parent.removeChild(editValueDiv);
+      parent.innerHTML = this.prevParent;
+    }
   }
 
   remove(event) {
-    event.target.parentElement.remove();
+    let parent = event.target.parentElement;
+    parent.remove();
     number -= 1;
   }
 
@@ -60,4 +78,5 @@ class Element {
     }
   }
 }
+
 new Element(todoList);
