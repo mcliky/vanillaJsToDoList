@@ -5,6 +5,7 @@ let number = 1;
 let itemName = "Item 2";
 let status = "Todo";
 let todoList = document.querySelector(".todo-list");
+let checkEdtFlag = false;
 
 addBtn.addEventListener("click", (event) => {
   if (todoInput.value === "") {
@@ -25,49 +26,55 @@ addBtn.addEventListener("click", (event) => {
 
 class Element {
   constructor(elem) {
-    this.elem = elem; // Store the element
+    this.elem = elem;
+    this.parent;
+    this.prevParent;
 
     elem.addEventListener("click", this.onClick.bind(this));
   }
 
   edit(event) {
-    let parent = event.target.parentElement;
-    this.prevParent = parent.innerHTML; // Store the previous content
-    parent.innerHTML = `<div class="edit-value">
+    if (checkEdtFlag === true) {
+      return;
+    } else {
+      checkEdtFlag = true;
+      this.parent = event.target.parentElement;
+      this.prevParent = this.parent.innerHTML;
+      this.parent.innerHTML = `<div class="edit-value">
  <input class="edit-text" type="text" placeholder="new name" />
  <button data-action="editTodo" type="button">Edit name</button>
  <button data-action="cancelEdit" type="button">Cancel</button>
-</div>
-<p class='warning'>No input</p>`;
+ <p class='warning'>No input</p>
+</div>`;
+    }
   }
 
   editTodo(event) {
-    let parent = event.target.parentElement;
-    if (parent.querySelector(".edit-text").value === "") {
-      parent.querySelector(".warning").style.display = "block";
+    console.log(this.parent);
+    this.parent = event.target.parentElement;
+    const editText = this.parent.querySelector(".edit-text");
+    console.log(this.parent);
+    if (editText.value === "") {
+      this.parent.querySelector(".warning").style.display = "block";
     } else {
-      number -= 1;
-      parent.innerHTML = `<span>${number}</span> <span>${
-        parent.querySelector(".edit-text").value
-      } </span><span>${status}</span>
-   <button data-action="edit">Edit</button>
+      this.parent.querySelector(".warning").style.display = "none";
+      this.parent.parentElement.innerHTML = `<span>${number}</span> <span>${editText.value} </span><span>${status}</span>
+   <button data-action="edit">Edit</button> 
    <button data-action="remove">Remove</button>
   `;
+      checkEdtFlag = false;
     }
   }
 
   cancelEdit(event) {
-    let parent = event.target.parentElement;
-    let editValueDiv = parent.querySelector(".edit-value");
-    if (editValueDiv) {
-      parent.removeChild(editValueDiv);
-      parent.innerHTML = this.prevParent;
-    }
+    console.log(event);
+    this.parent.innerHTML = this.prevParent;
+    checkEdtFlag = false;
   }
 
   remove(event) {
-    let parent = event.target.parentElement;
-    parent.remove();
+    this.parent = event.target.parentElement;
+    this.parent.remove();
     number -= 1;
   }
 
