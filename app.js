@@ -2,10 +2,8 @@ const todoInput = document.querySelector(".todo-text");
 const addBtn = document.querySelector(".add-todo");
 const remvBtn = document.querySelector("remove-button");
 let number = 1;
-let itemName = "Item 2";
 let status = "Todo";
 let todoList = document.querySelector(".todo-list");
-let checkEdtFlag = false;
 
 addBtn.addEventListener("click", (event) => {
   if (todoInput.value === "") {
@@ -29,15 +27,15 @@ class Element {
     this.elem = elem;
     this.parent = null;
     this.prevParent = null;
-
+    this.checkEdtFlag = false;
     elem.addEventListener("click", this.onClick.bind(this));
   }
 
   edit(event) {
-    if (checkEdtFlag === true) {
+    if (this.checkEdtFlag === true) {
       return;
     } else {
-      checkEdtFlag = true;
+      this.checkEdtFlag = true;
       this.parent = event.target.parentElement;
       this.prevParent = this.parent.innerHTML;
       let itemName = this.parent.querySelector(".item-name").innerHTML;
@@ -61,45 +59,36 @@ class Element {
       console.log(this.prevParent);
       this.parent.innerHTML = this.prevParent;
       this.parent.querySelector(".item-name").innerHTML = editText.value;
-      checkEdtFlag = false;
+      this.checkEdtFlag = false;
     }
   }
 
   cancelEdit(event) {
     console.log(event);
     this.parent.innerHTML = this.prevParent;
-    checkEdtFlag = false;
+    this.checkEdtFlag = false;
   }
 
   removeBtn(event) {
     let grandParent = event.target.parentElement.parentElement;
     this.parent = event.target.parentElement;
-    let length = number;
     let itemList = grandParent.querySelectorAll("li");
-    if (this.parent.querySelector(`.item${number - 1}`)) {
-      this.parent.remove();
-      number -= 1;
-    } else {
-      let isGrtrRmvItm = false; //greater than removed item variable
-      itemList.forEach((item, i) => {
-        let fixedIndex = i + 1;
-        if (this.parent.querySelector(`.item${fixedIndex}`)) {
-          if (
-            this.parent.querySelector(`.item${fixedIndex}`).innerHTML != "1"
-          ) {
-            number -= 1;
-          }
-          this.parent.remove();
-          isGrtrRmvItm = true;
-        }
-        if (isGrtrRmvItm) {
-          let currentItem = item.querySelector(`.item${fixedIndex}`);
-          currentItem.classList.remove(`item${fixedIndex}`);
-          currentItem.classList.add(`item${fixedIndex - 1}`);
-          currentItem.innerHTML -= 1;
-        }
-      });
-    }
+    let isGrtrRmvItm = false; //greater than removed item variable
+    itemList.forEach((item, i) => {
+      let fixedIndex = i + 1;
+      if (this.parent.querySelector(`.item${fixedIndex}`)) {
+        number -= 1;
+        this.parent.remove();
+        console.log(number);
+        isGrtrRmvItm = true;
+      }
+      if (isGrtrRmvItm) {
+        let currentItem = item.querySelector(`.item${fixedIndex}`);
+        currentItem.classList.remove(`item${fixedIndex}`);
+        currentItem.classList.add(`item${fixedIndex - 1}`);
+        currentItem.innerHTML -= 1;
+      }
+    });
   }
 
   onClick(event) {
