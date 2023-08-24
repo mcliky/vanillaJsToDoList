@@ -1,22 +1,22 @@
 const todoInput = document.querySelector(".todo-text");
 const addBtn = document.querySelector(".add-todo");
 const remvBtn = document.querySelector("remove-button");
-let number = 1;
 let status = "Todo";
 let todoList = document.querySelector(".todo-list");
-
 addBtn.addEventListener("click", (event) => {
+  const itemList = todoList.querySelectorAll("li");
+  const todoNumber = itemList.length + 1;
   if (todoInput.value === "") {
     event.target.parentElement.querySelector(".warning").style.display =
       "inline-block";
   } else {
     event.target.parentElement.querySelector(".warning").style.display = "none";
     let todoItem = `<li class="todo-item">
-<span class="item${number}">${number}</span> <span class="item-name">${todoInput.value} </span><span>${status}</span>
+<span class="item${todoNumber}">${todoNumber}</span> <span class="item-name">${todoInput.value} </span><span>${status}</span>
 <button data-action="edit">Edit</button>
 <button data-action="removeBtn">Remove</button>
 </li> `;
-    number += 1;
+    console.log(todoNumber);
     todoList.innerHTML += todoItem;
     todoInput.value = "";
   }
@@ -77,9 +77,7 @@ class Element {
     itemList.forEach((item, i) => {
       let fixedIndex = i + 1;
       if (this.parent.querySelector(`.item${fixedIndex}`)) {
-        number -= 1;
         this.parent.remove();
-        console.log(number);
         isGrtrRmvItm = true;
       }
       if (isGrtrRmvItm) {
