@@ -27,8 +27,8 @@ addBtn.addEventListener('click', (event) => {
 class Element {
   constructor(elem) {
     this.elem = elem
-    this.parent
-    this.prevParent
+    this.parent = null
+    this.prevParent = null
 
     elem.addEventListener('click', this.onClick.bind(this))
   }
@@ -75,29 +75,30 @@ class Element {
     let grandParent = event.target.parentElement.parentElement
     this.parent = event.target.parentElement
     let length = number
+    let itemList = grandParent.querySelectorAll('li')
     if (this.parent.querySelector(`.item${number - 1}`)) {
       this.parent.remove()
       number -= 1
     } else {
-      let i = 1
-      while (i < length) {
-        console.log(i)
-        if (this.parent.querySelector(`.item${i}`)) {
-          if (this.parent.querySelector(`.item${i}`).innerHTML !== 1) {
+      let isGrtrRmvItm = false //greater than removed item variable
+      itemList.forEach((item, i) => {
+        let fixedIndex = i + 1
+        if (this.parent.querySelector(`.item${fixedIndex}`)) {
+          if (
+            this.parent.querySelector(`.item${fixedIndex}`).innerHTML != '1'
+          ) {
             number -= 1
           }
           this.parent.remove()
+          isGrtrRmvItm = true
         }
-        if (Number(grandParent.querySelector(`.item${i}`).innerHTML) === 1) {
-          i += 1
-          continue
-        } else {
-          grandParent.querySelector(`.item${i}`).innerHTML = (
-            Number(grandParent.querySelector(`.item${i}`).innerHTML) - 1
-          ).toString()
+        if (isGrtrRmvItm) {
+          let currentItem = item.querySelector(`.item${fixedIndex}`)
+          currentItem.classList.remove(`item${fixedIndex}`)
+          currentItem.classList.add(`item${fixedIndex - 1}`)
+          currentItem.innerHTML -= 1
         }
-        i += 1
-      }
+      })
     }
   }
 
