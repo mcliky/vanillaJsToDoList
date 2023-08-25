@@ -14,7 +14,7 @@ addBtn.addEventListener("click", (event) => {
     let todoItem = `<li class="todo-item">
 <span class="item${todoNumber}">${todoNumber}</span> <span class="item-name">${todoInput.value} </span><span>${status}</span>
 <button data-action="edit">Edit</button>
-<button data-action="removeBtn">Remove</button>
+<button data-action="removeItem">Remove</button>
 </li> `;
     console.log(todoNumber);
     todoList.innerHTML += todoItem;
@@ -69,23 +69,18 @@ class Element {
     this.checkEdtFlag = false;
   }
 
-  removeBtn(event) {
-    let grandParent = event.target.parentElement.parentElement;
+  removeItem(event) {
     this.parent = event.target.parentElement;
-    let itemList = grandParent.querySelectorAll("li");
-    let isGrtrRmvItm = false; //greater than removed item variable
+    this.parent.remove();
+    this.updateItem(event);
+  }
+
+  updateItem(event) {
+    let itemList = document.querySelectorAll(".todo-list li");
+    console.log(itemList);
     itemList.forEach((item, i) => {
-      let fixedIndex = i + 1;
-      if (this.parent.querySelector(`.item${fixedIndex}`)) {
-        this.parent.remove();
-        isGrtrRmvItm = true;
-      }
-      if (isGrtrRmvItm) {
-        let currentItem = item.querySelector(`.item${fixedIndex}`);
-        currentItem.classList.remove(`item${fixedIndex}`);
-        currentItem.classList.add(`item${fixedIndex - 1}`);
-        currentItem.innerHTML -= 1;
-      }
+      const fixedIndex = i + 1;
+      item.firstChild.nextSibling.innerHTML = fixedIndex;
     });
   }
 
