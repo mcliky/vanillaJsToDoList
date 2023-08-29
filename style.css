@@ -1,19 +1,39 @@
-.todo-list {
-  list-style-type: none;
-  width: 600px;
-}
-
 .list-container {
   display: flex;
   align-items: center;
   flex-direction: column;
 }
 
-.table-head {
+.item-list{
+  width: 800px    ;
+}
+
+.warning {
+  display: none;
+  color: red;
+}
+.undo-button{
+  display: none;
+  position: relative;
+  left: 310px;
+}
+/* 
+.todo-list {
+  list-style-type: none;
+  width: 600px;
+}
+
+
+
+.table {
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
   border-bottom: 1px solid black;
+  width: 600px;
+}
+
+.row{
   width: 600px;
 }
 
@@ -32,8 +52,5 @@
   margin-bottom: 20px;
 }
 
-.warning {
-  display: none;
-  color: red;
-}
 
+ */
